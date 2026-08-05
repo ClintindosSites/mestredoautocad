@@ -66,6 +66,25 @@
     </script>
   </head>
   <body>
+    <!-- Google tag (gtag.js) event - delayed navigation helper -->
+    <script>
+      // Helper function to delay opening a URL until a gtag event is sent.
+      // Call it in response to an action that should navigate to a URL.
+      function gtagSendEvent(url) {
+        var callback = function () {
+          if (typeof url === "string") {
+            window.location = url;
+          }
+        };
+        gtag("event", "purchase", {
+          event_callback: callback,
+          event_timeout: 2000,
+          // <event_parameters>
+        });
+        return false;
+      }
+    </script>
+
     <!-- Event snippet for Compra na página conversion page
 In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
     <script>
@@ -625,11 +644,7 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
           class="btn btn-primary"
           target="_blank"
           rel="noopener noreferrer"
-          onclick="
-            gtag('event', 'conversion', {
-              send_to: 'AW-17677408224/R3MGCK-GlNwcEOCvn-1B',
-            })
-          "
+          onclick="gtag_report_conversion()"
         >
           🚀 QUERO COMEÇAR AGORA
         </a>
