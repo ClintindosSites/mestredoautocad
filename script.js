@@ -1,20 +1,50 @@
-/* ==========================================
+/* ==========================================================
    MESTRE DO AUTOCAD
-   Tracking Profissional
-========================================== */
+   Tracking Profissional v2.0
+========================================================== */
 
-(function () {
+(() => {
   "use strict";
 
-  console.log("✅ Tracking iniciado.");
+  console.log("Tracking carregado.");
 
-  const COURSE_NAME = "Curso Mestre do AutoCAD";
-  const COURSE_VALUE = 197;
-  const CURRENCY = "BRL";
+  //==========================================================
+  // CONFIGURAÇÕES
+  //==========================================================
 
-  /*==========================================
-      SALVA UTMs
-  ==========================================*/
+  const COURSE = {
+    name: "Curso AutoCAD",
+    value: 197,
+    currency: "BRL",
+  };
+
+  const GOOGLE_ADS_CONVERSION = "AW-17677408224/R3MGCK-GlNwcEOCvn-1B";
+
+  //==========================================================
+  // FUNÇÕES
+  //==========================================================
+
+  function sendGA(event, params = {}) {
+    if (typeof gtag !== "undefined") {
+      gtag("event", event, params);
+    }
+  }
+
+  function sendFB(event, params = {}) {
+    if (typeof fbq !== "undefined") {
+      fbq("track", event, params);
+    }
+  }
+
+  function sendFBCustom(event) {
+    if (typeof fbq !== "undefined") {
+      fbq("trackCustom", event);
+    }
+  }
+
+  //==========================================================
+  // SALVA UTMs
+  //==========================================================
 
   const params = new URLSearchParams(window.location.search);
 
@@ -34,122 +64,113 @@
     }
   });
 
-  /*==========================================
-      VIEW CONTENT
-  ==========================================*/
+  //==========================================================
+  // VIEW CONTENT
+  //==========================================================
 
-  if (typeof fbq !== "undefined") {
-    fbq("track", "ViewContent", {
-      content_name: COURSE_NAME,
-      content_category: "Curso Online",
-      value: COURSE_VALUE,
-      currency: CURRENCY,
-    });
-  }
+  sendFB("ViewContent", {
+    content_name: COURSE.name,
+    content_category: "Curso Online",
+    value: COURSE.value,
+    currency: COURSE.currency,
+  });
 
-  /*==========================================
-      SCROLL
-  ==========================================*/
+  //==========================================================
+  // SCROLL
+  //==========================================================
 
   let scroll50 = false;
   let scroll90 = false;
 
   window.addEventListener("scroll", () => {
-    const scroll =
-      window.scrollY /
-      (document.documentElement.scrollHeight - window.innerHeight);
+    const percent =
+      (window.scrollY /
+        (document.documentElement.scrollHeight - window.innerHeight)) *
+      100;
 
-    if (scroll >= 0.5 && !scroll50) {
+    if (percent >= 50 && !scroll50) {
       scroll50 = true;
 
-      console.log("✅ Scroll 50%");
-
-      if (typeof fbq !== "undefined") fbq("trackCustom", "Scroll50");
-
-      if (typeof gtag !== "undefined") gtag("event", "scroll_50");
+      sendFBCustom("Scroll50");
+      sendGA("scroll_50");
     }
 
-    if (scroll >= 0.9 && !scroll90) {
+    if (percent >= 90 && !scroll90) {
       scroll90 = true;
 
-      console.log("✅ Scroll 90%");
-
-      if (typeof fbq !== "undefined") fbq("trackCustom", "Scroll90");
-
-      if (typeof gtag !== "undefined") gtag("event", "scroll_90");
+      sendFBCustom("Scroll90");
+      sendGA("scroll_90");
     }
   });
 
-  /*==========================================
-      TEMPO NA PÁGINA
-  ==========================================*/
+  //==========================================================
+  // TEMPO NA PÁGINA
+  //==========================================================
 
-  setTimeout(() => {
-    if (typeof fbq !== "undefined") fbq("trackCustom", "Time30");
+  [30, 60].forEach(time => {
+    setTimeout(() => {
+      sendFBCustom(`Time${time}`);
+      sendGA(`time_${time}`);
+    }, time * 1000);
+  });
 
-    if (typeof gtag !== "undefined") gtag("event", "time_30");
-  }, 30000);
-
-  setTimeout(() => {
-    if (typeof fbq !== "undefined") fbq("trackCustom", "Time60");
-
-    if (typeof gtag !== "undefined") gtag("event", "time_60");
-  }, 60000);
-
-  /*==========================================
-      CHECKOUT
-  ==========================================*/
+  //==========================================================
+  // CHECKOUT
+  //==========================================================
 
   function checkoutClick(e) {
     e.preventDefault();
 
     const url = this.href;
 
-    console.log("🛒 Checkout iniciado");
+    console.log("Checkout iniciado.");
 
-    // Facebook Pixel
-    if (typeof fbq !== "undefined") {
-      fbq("track", "InitiateCheckout", {
-        value: COURSE_VALUE,
-        currency: CURRENCY,
-      });
-    }
+    // Facebook
+    sendFB("InitiateCheckout", {
+      value: COURSE.value,
+      currency: COURSE.currency,
+    });
 
-    // Google Analytics 4
-    if (typeof gtag !== "undefined") {
-      gtag("event", "begin_checkout", {
-        currency: CURRENCY,
-        value: COURSE_VALUE,
-        items: [
-          {
-            item_name: COURSE_NAME,
-            price: COURSE_VALUE,
-            quantity: 1,
-          },
-        ],
-      });
-    }
+    // Google Analytics
+    sendGA("begin_checkout", {
+      currency: COURSE.currency,
+      value: COURSE.value,
+      items: [
+        {
+          item_name: COURSE.name,
+          price: COURSE.value,
+        },
+      ],
+    });
 
     // Google Ads
-    if (typeof gtag_report_conversion === "function") {
-      gtag_report_conversion(url);
+    if (typeof gtag !== "undefined") {
+      gtag("event", "conversion", {
+        send_to: GOOGLE_ADS_CONVERSION,
+        value: COURSE.value,
+        currency: COURSE.currency,
+        event_callback: function () {
+          window.open(url, "_blank");
+        },
+      });
+
+      setTimeout(() => {
+        window.open(url, "_blank");
+      }, 1200);
     } else {
-      window.location.href = url;
+      window.open(url, "_blank");
     }
   }
 
-  /*==========================================
-      BOTÕES DE CHECKOUT
-  ==========================================*/
+  //==========================================================
+  // BOTÕES
+  //==========================================================
 
-  const buttons = [
-    document.getElementById("checkout-btn"),
-    document.getElementById("checkout-btn-final"),
-  ];
+  ["checkout-btn", "checkout-btn-final"].forEach(id => {
+    const btn = document.getElementById(id);
 
-  buttons.forEach(button => {
-    if (button) {
-      button.addEventListener("click", checkoutClick);
+    if (btn) {
+      btn.addEventListener("click", checkoutClick);
     }
   });
 })();
