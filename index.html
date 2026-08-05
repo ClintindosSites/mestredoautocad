@@ -66,6 +66,27 @@
     </script>
   </head>
   <body>
+    <!-- Event snippet for Compra na página conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+    <script>
+      function gtag_report_conversion(url) {
+        var callback = function () {
+          if (typeof url != "undefined") {
+            window.location = url;
+          }
+        };
+        gtag("event", "conversion", {
+          send_to: "AW-17677408224/R3MGCK-GlNwcEOCvn-1B",
+          value: 1.0,
+          currency: "BRL",
+          transaction_id: "",
+          event_callback: callback,
+          // 'new_customer': true /* calculate dynamically, populate with true/false */,
+        });
+        return false;
+      }
+    </script>
+
     <!-- ===== COOKIE CONSENT BAR ===== -->
     <div class="cookie-bar" id="cookieBar">
       <span
@@ -605,7 +626,9 @@
           target="_blank"
           rel="noopener noreferrer"
           onclick="
-            gtag('event', 'conversion', { send_to: 'AW-XXXXXXXXX/XXXXXXXXXXX' })
+            gtag('event', 'conversion', {
+              send_to: 'AW-17677408224/R3MGCK-GlNwcEOCvn-1B',
+            })
           "
         >
           🚀 QUERO COMEÇAR AGORA
