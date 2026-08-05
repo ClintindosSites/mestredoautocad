@@ -37,61 +37,30 @@
     />
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
     <!-- Google tag (gtag.js) -->
+    <!-- Google Tag (GA4 + Google Ads) -->
     <script
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-HWXYCWFKX0"
     ></script>
+
     <script>
       window.dataLayer = window.dataLayer || [];
+
       function gtag() {
         dataLayer.push(arguments);
       }
+
       gtag("js", new Date());
 
+      // Google Analytics 4
       gtag("config", "G-HWXYCWFKX0");
-    </script>
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-3P5VRB3EH9"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
       gtag("config", "G-3P5VRB3EH9");
+
+      // Google Ads
+      gtag("config", "AW-17677408224");
     </script>
     <!-- Meta Pixel Code -->
-    <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        "script",
-        "https://connect.facebook.net/en_US/fbevents.js"
-      );
-      fbq("init", "1116906376996441");
-      fbq("track", "PageView");
-    </script>
+
     <noscript
       ><img
         height="1"
@@ -99,9 +68,15 @@
         style="display: none"
         src="https://www.facebook.com/tr?id=1116906376996441&ev=PageView&noscript=1"
     /></noscript>
-    <!-- End Meta Pixel Code -->
 
-    <!-- Meta Pixel Code -->
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display: none"
+        src="https://www.facebook.com/tr?id=1035243079482901&ev=PageView&noscript=1"
+    /></noscript>
+
     <script>
       !(function (f, b, e, v, n, t, s) {
         if (f.fbq) return;
@@ -126,19 +101,32 @@
         "script",
         "https://connect.facebook.net/en_US/fbevents.js"
       );
+
+      fbq("init", "1116906376996441");
       fbq("init", "1035243079482901");
+
       fbq("track", "PageView");
     </script>
-    <noscript
-      ><img
-        height="1"
-        width="1"
-        style="display: none"
-        src="https://www.facebook.com/tr?id=1035243079482901&ev=PageView&noscript=1"
-    /></noscript>
     <!-- End Meta Pixel Code -->
   </head>
   <body>
+    <script>
+      function enviarPurchaseGA4() {
+        gtag("event", "purchase", {
+          transaction_id: Date.now().toString(),
+          value: 197.0,
+          currency: "BRL",
+          items: [
+            {
+              item_id: "curso-autocad",
+              item_name: "Curso Mestre do AutoCAD",
+              quantity: 1,
+              price: 197.0,
+            },
+          ],
+        });
+      }
+    </script>
     <!-- Google tag (gtag.js) event - delayed navigation helper -->
     <script>
       // Helper function to delay opening a URL until a gtag event is sent.
@@ -209,7 +197,14 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
             certificado reconhecido em todo o Brasil, acesso vitalício e suporte
             direto com o professor.
           </p>
-          <a href="#price" class="btn btn-primary">QUERO COMEÇAR AGORA</a>
+          <a
+            id="checkout-btn"
+            href="https://go.hotmart.com/H101021157N?ap=4b22&utm_source=google&utm_medium=cpc&utm_campaign=pesquisa_autocad&utm_content=cta_principal"
+            class="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            >QUERO COMEÇAR AGORA</a
+          >
           <div class="hero-stats">
             <div class="hero-stat">
               <div class="num">30h</div>
@@ -615,15 +610,11 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
           <!-- Exemplo: https://pay.hotmart.com/T21350452F?sck=HOTMART_SITE&off=xxx -->
           <!-- ================================================================= -->
           <a
-            href="https://go.hotmart.com/H101021157N?ap=4b22"
+            href="https://go.hotmart.com/H101021157N?ap=4b22&utm_source=google&utm_medium=cpc&utm_campaign=pesquisa_autocad&utm_content=cta_principal"
             class="btn btn-primary"
             target="_blank"
             rel="noopener noreferrer"
-            onclick="
-              gtag('event', 'conversion', {
-                send_to: 'G-HWXYCWFKX0',
-              })
-            "
+            id="checkout-btn"
           >
             COMPRE SEU CURSO AGORA
           </a>
@@ -713,11 +704,11 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
         <!-- 🔴 SUBSTITUA o link abaixo pelo SEU LINK DE AFILIADO também aqui   -->
         <!-- ================================================================= -->
         <a
-          href="https://pay.hotmart.com/T21350452F?off=SEUCODIGO&checkoutMode=10"
+          href="https://go.hotmart.com/H101021157N?ap=4b22&utm_source=google&utm_medium=cpc&utm_campaign=pesquisa_autocad&utm_content=cta_final"
           class="btn btn-primary"
           target="_blank"
           rel="noopener noreferrer"
-          onclick="gtag_report_conversion()"
+          id="checkout-btn-final"
         >
           🚀 QUERO COMEÇAR AGORA
         </a>
@@ -770,5 +761,6 @@ In your html page, add the snippet and call gtag_report_conversion when someone 
         });
       });
     </script>
+    <script src="script.js"></script>
   </body>
 </html>
